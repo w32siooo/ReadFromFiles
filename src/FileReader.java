@@ -17,12 +17,10 @@ public class FileReader {
 
 //Read File Line By Line
             while ((strLine = br.readLine()) != null) {
-                // Print the content on the console
-                //System.out.println (strLine);
 
                 // Split by delimiter.
 
-                String[] arrSplit = strLine.split(", ");
+                String[] arrSplit = strLine.split(",");
 
                 this.outPut.add(arrSplit);
 

@@ -1,6 +1,23 @@
 
-]squid:UselessImportCheck"-Remove this unused import 'java.util.Random'.(èøÉ›ùÿÿÿÿ8£—±¹›/
-Š"squid:ClassVariableVisibilityCheck"PMake year a static final constant or non-public and provide accessors if needed.(ôé»Ëıÿÿÿÿ8À®îº›/
+nsquid:CommentedOutCodeLineJ"<This block of commented-out lines of code should be removed.(ê´æ¤ûÿÿÿÿ8öàœ§¤/
+[
+squid:S106+"9Replace this use of System.out or System.err by a logger.(Ì¤¤ÿøÿÿÿÿ8ÕûÀ¥¤/
+Ksquid:S1604j"(Make this anonymous inner class a lambda(à‰´«üÿÿÿÿ8ĞÀê¤¤/
 V
-squid:S106"9Replace this use of System.out or System.err by a logger.(ˆÑâ8ŒÖ»›/
-‹"squid:ClassVariableVisibilityCheck"QMake model a static final constant or non-public and provide accessors if needed.(¢úõşÿÿÿÿ8À®îº›/
+squid:S106Q"9Replace this use of System.out or System.err by a logger.(à“‡î8›¥¢¨¤/
+V
+squid:S106Y"9Replace this use of System.out or System.err by a logger.(ÿ‘Ÿ8óôÅ¨¤/
+usquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ÙØ¤Şıÿÿÿÿ8³¯Å¨¤/
+V
+squid:S1064"9Replace this use of System.out or System.err by a logger.(‚­ä8Öã˜¥¤/
+[
+squid:S1069"9Replace this use of System.out or System.err by a logger.(ªÓ¼áşÿÿÿÿ8¹”Ì¥¤/
+[
+squid:S106>"9Replace this use of System.out or System.err by a logger.(•Áø¼ıÿÿÿÿ8Ìûô¥¤/
+Tsquid:UselessImportCheck")Remove this unused import 'java.io.File'.(†Ğ¥Å8ËÅü—¤/
+|squid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÑÚÊ¦ûÿÿÿÿ8Ì×»£¤/
+wsquid:S2293v"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÉûÆ8ĞÀê¤¤/
+[
+squid:S106O"9Replace this use of System.out or System.err by a logger.(©Ï¨”ùÿÿÿÿ8õÀ×¦¤/
+V
+squid:S106C"9Replace this use of System.out or System.err by a logger.(Ûîİ8û½‘¨¤/

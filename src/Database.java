@@ -1,10 +1,10 @@
 import java.util.List;
 
-public class Database {
+public class Database <T>{
 
-    List userList;
-    List sessionList;
-    List productList;
+    private List <T> userList;
+    private List <T> sessionList;
+    private List <T> productList;
 
 
     public Database() throws Exception {
@@ -18,16 +18,17 @@ public class Database {
         this.productList = Products.getOutputList();
     }
 
-    public List getUserList() {
+    public List<T> getUserList() {
         return userList;
     }
 
-    public List getSessionList() {
+    public List<T> getSessionList() {
         return sessionList;
     }
 
-    public List getProductList() {
+    public List<T> getProductList() {
         return productList;
     }
+
 
 }
