@@ -113,8 +113,8 @@ public class Api<T> {
 
         List userList = database.getUserList();
 
+        //Placeholder list of integers that we will use to store our list of most purchased movies in.
         ArrayList intList = new ArrayList<Integer>();
-
 
         for (int i = 0; i < userList.size(); i++) {
 
@@ -130,14 +130,12 @@ public class Api<T> {
             }
         }
 
-        System.out.println(intList.toString());
 
         int[] toSort = convertIntegers(intList);
 
-        System.out.println("The most purchased movies are" + Arrays.toString(topKFrequent(toSort, 3)));
+        System.out.println("The most purchased movies are");
 
         int[] topMovies = topKFrequent(toSort, 3);
-
 
         //int occurrences = Collections.frequency(intList, 7);
         //System.out.println("ocurrencies are " + occurrences);
@@ -155,43 +153,46 @@ public class Api<T> {
 
     public List<T> generateRecommendations() {
 
+        //Load the lists we need from the databases.
+        List productList = database.getProductList();
+        List sessionList = database.getSessionList();
+
         //System Two
 
-        System.out.println("System two recommends products (movies) based on User session data \n");
+        System.out.println("System two recommends products (movies) based on User session data\n");
 
-        for (int i = 0; i < database.getSessionList().size(); i++) {
-            String[] singleSession = (String[]) database.getSessionList().get(i);
+        //Iterate through our session list.
+        for (int i = 0; i < sessionList.size(); i++) {
 
-            System.out.println("User " + singleSession[0] + " Has viewed  \n");
+            //Get the single session data.
+            String[] singleSession = (String[]) sessionList.get(i);
 
+            //Get the session value from the session string array.
             String str = singleSession[1];
 
+            //Remove all whitespaces.
             str = str.replaceAll("\\s", "");
 
-            //System.out.println(Integer.parseInt(str));
+            //Print out the movie viewed in the session data.
+            String[] singularProduct = (String[]) productList.get(Integer.parseInt(str)-1);
 
 
-            String[] singularProduct = (String[]) database.getProductList().get(Integer.parseInt(str) - 1);
-            for (int j = 0; j < singularProduct.length; j++) {
-                System.out.print(singularProduct[j]);
-            }
-            System.out.println("\nTherefore he is recommended to watch the following movies next:");
+            //search productlist for similar hits. Here we grab a genre and search for matches in the product list for the given genre.
 
-            for (int j = 0; j < database.getProductList().size(); j++) {
-                String[] tempProduct = (String[]) database.getProductList().get(j);
-                for (int k = 0; k < tempProduct.length; k++) {
-                    if (tempProduct[k].contains("Thriller")) {
+            System.out.println("\nRecommendations based on the "+ singularProduct[4]+ " genre");
 
-                        //Get all the numbers including thriller.
-                        System.out.println(j + 1);
-                    }
 
+            String toSearchfor =  singularProduct[4];
+
+            for (int j = 0; j < productList.size(); j++) {
+                String[] tempProduct = (String[]) productList.get(j);
+                if(Arrays.toString(tempProduct).contains(toSearchfor)){
+                    System.out.println(Arrays.toString(tempProduct));
                 }
             }
-
-            //implement system that searches for String value containing relevant movies based on genres.
-            //It's literally just String.contains
         }
+
+
 
 
         return recommendations;
