@@ -12,6 +12,7 @@ class Api {
         this.database = database;
     }
 
+    //A helper function to sort a map by values.
     private static <K, V extends Comparable<V>> Map<K, V>
     sortByValues(final Map<K, V> map) {
         Comparator<K> valueComparator =
@@ -30,6 +31,7 @@ class Api {
         return sortedByValues;
     }
 
+    //A simple helper function to convert a arraylist of integers to an int array.
     private static int[] convertIntegers(List<Integer> integers) {
         int[] ret = new int[integers.size()];
         Iterator<Integer> iterator = integers.iterator();
@@ -39,13 +41,13 @@ class Api {
         return ret;
     }
 
-    //K Most Frequent Elements by sorting HashMap
+    //A helper function to find the most frequent elements.
     private static int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> elemCountMap = new HashMap<>();
         for (int num : nums) {
             elemCountMap.put(num, elemCountMap.getOrDefault(num, 0) + 1);
         }
-//Sort by values and pick only top k elements
+//Sort, and find the most frequent elements.
         List<Integer> result =
                 elemCountMap.entrySet().stream()
                         .sorted((c1, c2) -> c2.getValue().compareTo(c1.getValue()))
@@ -222,6 +224,7 @@ class Api {
 
     }
 
+    //Helper function to generate recommendations based on the movie genres that the relevant userID has watched in their sessiondata array.
     private void printRecs(List productList, String[] singularProduct, int iteration) {
         System.out.println("\nRecommendations based on the "+ singularProduct[iteration+3]+ " genre");
 
