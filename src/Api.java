@@ -1,6 +1,8 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Map.*;
+
 class Api {
 
     //Keeps database in memory so we only have to read from files once.
@@ -23,7 +25,7 @@ class Api {
                 };
 
         Map<K, V> sortedByValues =
-                new TreeMap<K, V>(valueComparator);
+                new TreeMap<>(valueComparator);
         sortedByValues.putAll(map);
         return sortedByValues;
     }
@@ -32,13 +34,13 @@ class Api {
         int[] ret = new int[integers.size()];
         Iterator<Integer> iterator = integers.iterator();
         for (int i = 0; i < ret.length; i++) {
-            ret[i] = iterator.next().intValue();
+            ret[i] = iterator.next();
         }
         return ret;
     }
 
     //K Most Frequent Elements by sorting HashMap
-    public static int[] topKFrequent(int[] nums, int k) {
+    private static int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> elemCountMap = new HashMap<>();
         for (int num : nums) {
             elemCountMap.put(num, elemCountMap.getOrDefault(num, 0) + 1);
@@ -48,7 +50,7 @@ class Api {
                 elemCountMap.entrySet().stream()
                         .sorted((c1, c2) -> c2.getValue().compareTo(c1.getValue()))
                         .limit(k)
-                        .map(i -> i.getKey())
+                        .map(Entry::getKey)
                         .collect(Collectors.toList());
         int[] resultArr = new int[result.size()];
         for (int i = 0; i < result.size(); i++) {
@@ -57,7 +59,7 @@ class Api {
         return resultArr;
     }
 
-    public String [] printUserSessions (){
+    String [] printUserSessions(){
 
         List sessionList = database.getSessionList();
         List productList = database.getProductList();
@@ -90,7 +92,7 @@ class Api {
 
     }
 
-    public void highestRatedProducts(int recommendations) {
+    void highestRatedProducts(int recommendations) {
 
         System.out.println("System one recommends products by the highest rated or the most purchased.");
 
@@ -112,11 +114,11 @@ class Api {
         }
 
         //sort treemap by values
-        Map sortedMap = sortByValues(productRating);
+        Map<Integer, Float> sortedMap = sortByValues(productRating);
         // Get Set of entries
-        Set set = sortedMap.entrySet();
+        Set<Entry<Integer, Float>> set = sortedMap.entrySet();
         // Get iterator
-        Iterator it = set.iterator();
+        Iterator<Entry<Integer, Float>> it = set.iterator();
         // Show TreeMap elements
 
         int counter = 0;
@@ -125,13 +127,13 @@ class Api {
 
         while (it.hasNext() && counter < recommendations) {
 
-            Map.Entry pair = (Map.Entry) it.next();
+            Entry<Integer, Float> pair = it.next();
 
-            String[] singleProduct = (String[]) productList.get((Integer) pair.getKey() - 1);
+            String[] singleProduct = (String[]) productList.get(pair.getKey() - 1);
 
-            for (int i = 0; i < singleProduct.length; i++) {
+            for (String aSingleProduct : singleProduct) {
 
-                System.out.print(singleProduct[i]);
+                System.out.print(aSingleProduct);
 
             }
 
@@ -145,43 +147,41 @@ class Api {
         List userList = database.getUserList();
 
         //Placeholder list of integers that we will use to store our list of most purchased movies in.
-        ArrayList intList = new ArrayList<Integer>();
+        ArrayList<Integer> intList = new ArrayList<>();
 
-        for (int i = 0; i < userList.size(); i++) {
+        for (Object anUserList : userList) {
 
-            String[] singleUser = (String[]) userList.get(i);
+            String[] singleUser = (String[]) anUserList;
 
             String temp = singleUser[2].replaceAll("\\s", "");
 
             String[] arrSplit = temp.split(";");
 
-            for (int j = 0; j < arrSplit.length; j++) {
+            for (String anArrSplit : arrSplit) {
 
-                intList.add(Integer.parseInt(arrSplit[j]));
+                intList.add(Integer.parseInt(anArrSplit));
             }
         }
 
 
-        int[] toSort = convertIntegers(intList);
+        int[] toSort;
+        toSort = convertIntegers(intList);
 
         System.out.println("\n\nThe most purchased movies are");
 
         int[] topMovies = topKFrequent(toSort, 3);
 
-        //int occurrences = Collections.frequency(intList, 7);
-        //System.out.println("ocurrencies are " + occurrences);
-
-        for (int i = 0; i < topMovies.length; i++) {
-            String[] singularProduct = (String[]) database.getProductList().get(topMovies[i]-1);
-            for (int j = 0; j < singularProduct.length; j++) {
-                System.out.print(singularProduct[j] +" ");
+        for (int topMovy : topMovies) {
+            String[] singularProduct = (String[]) database.getProductList().get(topMovy - 1);
+            for (String aSingularProduct : singularProduct) {
+                System.out.print(aSingularProduct + " ");
             }
             System.out.println();
         }
 
     }
 
-    public void generateRecommendations(String userID) {
+    void generateRecommendations(String userID) {
 
         //Load the lists we need from the databases.
         List productList = database.getProductList();
@@ -192,25 +192,25 @@ class Api {
         System.out.println("\nSystem two recommends products (movies) based on User session data");
 
         //Iterate through our session list.
-        for (int i = 0; i < sessionList.size(); i++) {
+        for (Object aSessionList : sessionList) {
 
             //Get the single session data.
-            String[] singleSession = (String[]) sessionList.get(i);
+            String[] singleSession = (String[]) aSessionList;
 
             //Get the session value from the session string array.
 
             if (userID.equals(singleSession[0])) {
 
-            String str = singleSession[1];
+                String str = singleSession[1];
 
-            //Remove all whitespaces.
-            str = str.replaceAll("\\s", "");
+                //Remove all whitespaces.
+                str = str.replaceAll("\\s", "");
 
-            //Print out the movie viewed in the session data.
-            String[] singularProduct = (String[]) productList.get(Integer.parseInt(str)-1);
+                //Print out the movie viewed in the session data.
+                String[] singularProduct = (String[]) productList.get(Integer.parseInt(str) - 1);
 
 
-            //search productlist for similar hits. Here we grab a genre and search for matches in the product list for the given genre.
+                //search productlist for similar hits. Here we grab a genre and search for matches in the product list for the given genre.
 
                 for (int j = 0; j < 4; j++) {
                     printRecs(productList, singularProduct, j);
@@ -225,11 +225,11 @@ class Api {
     private void printRecs(List productList, String[] singularProduct, int iteration) {
         System.out.println("\nRecommendations based on the "+ singularProduct[iteration+3]+ " genre");
 
-        String toSearchfor =  singularProduct[iteration+4];
+        String toSearchfor =  singularProduct[iteration+3];
 
-        for (int j = 0; j < productList.size(); j++) {
-            String[] tempProduct = (String[]) productList.get(j);
-            if(Arrays.toString(tempProduct).contains(toSearchfor)){
+        for (Object aProductList : productList) {
+            String[] tempProduct = (String[]) aProductList;
+            if (Arrays.toString(tempProduct).contains(toSearchfor)) {
                 System.out.println(Arrays.toString(tempProduct));
             }
         }
