@@ -4,6 +4,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+//A simple class that reads data from a text file and returns an arraylist of String containing the inputs
+//Line by line.
+
 public class FileReader {
     List outPut = new ArrayList<String[]>();
 
@@ -15,7 +18,7 @@ public class FileReader {
 
             String strLine;
 
-//Read File Line By Line
+//Read file line by line.
             while ((strLine = br.readLine()) != null) {
 
                 // Split by delimiter.

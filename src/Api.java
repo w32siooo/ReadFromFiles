@@ -1,28 +1,25 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Api<T> {
+class Api {
 
-    private List<T> recommendations;
+    //Keeps database in memory so we only have to read from files once.
     private Database database;
 
-
-    public Api(Database database) {
+    Api(Database database) {
         this.database = database;
     }
 
-    public static <K, V extends Comparable<V>> Map<K, V>
+    private static <K, V extends Comparable<V>> Map<K, V>
     sortByValues(final Map<K, V> map) {
         Comparator<K> valueComparator =
-                new Comparator<K>() {
-                    public int compare(K k2, K k1) {
-                        int compare =
-                                map.get(k1).compareTo(map.get(k2));
-                        if (compare == 0)
-                            return 1;
-                        else
-                            return compare;
-                    }
+                (k2, k1) -> {
+                    int compare =
+                            map.get(k1).compareTo(map.get(k2));
+                    if (compare == 0)
+                        return 1;
+                    else
+                        return compare;
                 };
 
         Map<K, V> sortedByValues =
@@ -31,7 +28,7 @@ public class Api<T> {
         return sortedByValues;
     }
 
-    public static int[] convertIntegers(List<Integer> integers) {
+    private static int[] convertIntegers(List<Integer> integers) {
         int[] ret = new int[integers.size()];
         Iterator<Integer> iterator = integers.iterator();
         for (int i = 0; i < ret.length; i++) {
@@ -60,7 +57,42 @@ public class Api<T> {
         return resultArr;
     }
 
+    public String [] printUserSessions (){
+
+        List sessionList = database.getSessionList();
+        List productList = database.getProductList();
+
+        //System Two
+
+        String[] sessionUsers = new String[database.getSessionList().size()];
+
+        //Iterate through our session list.
+        for (int i = 0; i < sessionList.size(); i++) {
+
+            //Get the single session data.
+            String[] singleSession = (String[]) sessionList.get(i);
+
+            sessionUsers[i] = singleSession[0];
+
+            //Get the session value from the session string array.
+            String str = singleSession[1];
+
+            //Remove all whitespaces.
+            str = str.replaceAll("\\s", "");
+
+            //Print out the movie viewed in the session data.
+            String[] singularProduct = (String[]) productList.get(Integer.parseInt(str) - 1);
+            System.out.println("User " + singleSession[0] +" has looked at "+ Arrays.toString(singularProduct));
+
+        }
+
+        return sessionUsers;
+
+    }
+
     public void highestRatedProducts(int recommendations) {
+
+        System.out.println("System one recommends products by the highest rated or the most purchased.");
 
         //Create map for storing the product Ratings.
         HashMap<Integer, Float> productRating;
@@ -99,17 +131,16 @@ public class Api<T> {
 
             for (int i = 0; i < singleProduct.length; i++) {
 
-                System.out.print(singleProduct[i] + " ");
+                System.out.print(singleProduct[i]);
 
             }
 
-            counter++;
             System.out.println();
+
+            counter++;
         }
 
-
         //find the most purchased products from users.txt
-
 
         List userList = database.getUserList();
 
@@ -133,7 +164,7 @@ public class Api<T> {
 
         int[] toSort = convertIntegers(intList);
 
-        System.out.println("The most purchased movies are");
+        System.out.println("\n\nThe most purchased movies are");
 
         int[] topMovies = topKFrequent(toSort, 3);
 
@@ -148,10 +179,9 @@ public class Api<T> {
             System.out.println();
         }
 
-
     }
 
-    public List<T> generateRecommendations() {
+    public void generateRecommendations(String userID) {
 
         //Load the lists we need from the databases.
         List productList = database.getProductList();
@@ -159,7 +189,7 @@ public class Api<T> {
 
         //System Two
 
-        System.out.println("System two recommends products (movies) based on User session data\n");
+        System.out.println("\nSystem two recommends products (movies) based on User session data");
 
         //Iterate through our session list.
         for (int i = 0; i < sessionList.size(); i++) {
@@ -168,6 +198,9 @@ public class Api<T> {
             String[] singleSession = (String[]) sessionList.get(i);
 
             //Get the session value from the session string array.
+
+            if (userID.equals(singleSession[0])) {
+
             String str = singleSession[1];
 
             //Remove all whitespaces.
@@ -179,22 +212,26 @@ public class Api<T> {
 
             //search productlist for similar hits. Here we grab a genre and search for matches in the product list for the given genre.
 
-            System.out.println("\nRecommendations based on the "+ singularProduct[4]+ " genre");
-
-
-            String toSearchfor =  singularProduct[4];
-
-            for (int j = 0; j < productList.size(); j++) {
-                String[] tempProduct = (String[]) productList.get(j);
-                if(Arrays.toString(tempProduct).contains(toSearchfor)){
-                    System.out.println(Arrays.toString(tempProduct));
+                for (int j = 0; j < 4; j++) {
+                    printRecs(productList, singularProduct, j);
                 }
+
             }
+
         }
 
+    }
 
+    private void printRecs(List productList, String[] singularProduct, int iteration) {
+        System.out.println("\nRecommendations based on the "+ singularProduct[iteration+3]+ " genre");
 
+        String toSearchfor =  singularProduct[iteration+4];
 
-        return recommendations;
+        for (int j = 0; j < productList.size(); j++) {
+            String[] tempProduct = (String[]) productList.get(j);
+            if(Arrays.toString(tempProduct).contains(toSearchfor)){
+                System.out.println(Arrays.toString(tempProduct));
+            }
+        }
     }
 }

@@ -2,10 +2,10 @@ import java.util.List;
 
 public class Database <T>{
 
+    //The lists that will hold the data from the text files.
     private List <T> userList;
     private List <T> sessionList;
     private List <T> productList;
-
 
     public Database() throws Exception {
         FileReader Users = new FileReader("src/data/Users.txt");
@@ -29,6 +29,5 @@ public class Database <T>{
     public List<T> getProductList() {
         return productList;
     }
-
 
 }
